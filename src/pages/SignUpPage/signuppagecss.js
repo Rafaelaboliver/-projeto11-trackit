@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from "styled-components"
 
-export const LoginContainer = styled.div`
+export const SignUpContainer = styled.div`
 display: flex;
 flex-direction: column;
 margin: auto;
@@ -11,7 +11,6 @@ img{
     margin: 68px auto 0px;
 }
 `
-
 export const DataContainer = styled.div`
 max-width: 303px;
 margin: 32px auto 0px;
