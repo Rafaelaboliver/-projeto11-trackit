@@ -1,20 +1,25 @@
 import { LoginContainer, DataContainer, TextContainer } from './loginpagecss';
 import logo from '../../assets/logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useState } from 'react';
 
 export default function LoginPage() {
-    const [email, setEmail] = ('');
-    const [password, setPassword] = ('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     function handleLogin(e) {
         e.preventDefault();
-        const body = { email: email, password: password };
         const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
+        const body = { email: email, password: password };
 
         const promise = axios.post(URL, body);
-        promise.then((res) => console.log(res.data));
-        promise.catch((err) => console.log(err.responde.data));
+        promise.then((res) => {
+            console.log(res)
+            navigate('/habitos')
+        });
+        promise.catch((err) => alert(err.response.data.message));
     }
 
     return (
