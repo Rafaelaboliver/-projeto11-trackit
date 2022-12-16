@@ -57,4 +57,7 @@ h3{
     margin-top: 25px;
     color: #52b6ff;
 }
+a{
+        color: #52b6ff;
+    }
 `

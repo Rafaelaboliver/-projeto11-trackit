@@ -2,12 +2,15 @@ import { LoginContainer, DataContainer, TextContainer } from './loginpagecss';
 import logo from '../../assets/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { UserInfoContext } from '../../contexts/UserInfoContext';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const { setToken } = useContext(UserInfoContext);
+    const {setImage} = useContext(UserInfoContext)
 
     function handleLogin(e) {
         e.preventDefault();
@@ -16,7 +19,9 @@ export default function LoginPage() {
 
         const promise = axios.post(URL, body);
         promise.then((res) => {
-            console.log(res)
+            setToken(res.data.token)
+            setImage(res.data.image)
+            console.log(res.data)
             navigate('/habitos')
         });
         promise.catch((err) => alert(err.response.data.message));
