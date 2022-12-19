@@ -24,7 +24,7 @@ export default function LoginPage() {
             console.log(res.data)
             navigate('/habitos')
         });
-        promise.catch((err) => alert(err.response.data.message));
+        promise.catch((err) => alert(err.response.data));
     }
 
     return (

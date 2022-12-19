@@ -13,12 +13,13 @@ import { useState } from "react";
 export default function App() {
   const [token, setToken] = useState('');
   const [image, setImage] = useState('');
+  
 
 
   return (
 
     <BrowserRouter>
-      <UserInfoContext.Provider value={{ token, setToken, image, setImage }}>
+      <UserInfoContext.Provider value={{ token, setToken, image, setImage}}>
         {/*<Navbar />*/}
         {/*<Menu />*/}
         <Routes>

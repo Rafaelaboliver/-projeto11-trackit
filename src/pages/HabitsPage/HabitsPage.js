@@ -1,18 +1,84 @@
-import { HabitsContainer, NewHabit, HabitBox, WeekdaysButton, EndButtons, CancelButton, SaveButton, NoHabitMessage } from './habitspagecss';
+import { HabitsContainer, NewHabit, HabitBox, WeekdaysButton, EndButtons, CancelButton, SaveButton, NoHabitMessage, ToDoHabits, DeleteIcon } from './habitspagecss';
 import Menu from '../../components/Menu/Menu';
 import Navbar from '../../components/Navbar/Navbar';
 import { weekdays } from '../../constants/weekdays'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useContext } from "react";
+import { UserInfoContext } from '../../contexts/UserInfoContext'
 
 export default function HabitsPage() {
 
     const [habit, setHabit] = useState('');
+    const [selection, setSelection] = useState([]);
     const [displayBox, setDisplayBox] = useState(true);
-    const [initialMessage, setInitialMessage] = useState(false);
+    const [initialMessage, setInitialMessage] = useState([]);
+    const [habitList, setHabitList] = useState(undefined);
+    const { token } = useContext(UserInfoContext);
 
-    function createNewHabit () {
-        setInitialMessage(true);
-    }
+    console.log('token:', token)
+
+    useEffect(() => {
+        const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
+        const body = {};
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        const promise = axios.get(URL, config, body);
+        promise.then((res) => {
+            setInitialMessage(res.data)
+            setHabitList(res.data)
+            console.log('LISTA RECEBIDA', res.data)
+        });
+        promise.catch((err) => (console.log('ERRO AO RECEBER A LISTA', err.response)));
+    }, []);
+
+
+    /*if (habitList === undefined) {
+        return <Loading><img src='https://uploaddeimagens.com.br/images/001/326/485/original/loading.gif?1520847880' alt='loading' /></Loading>
+    };*/
+
+    function createNewHabit(e) {
+        console.log('HÁBITO ESCRITO', habit);
+        console.log('DIAS SELECIONADOS', selection);
+
+        e.preventDefault();
+        const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
+        const body = { name: habit, days: selection };
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+
+        const promise = axios.post(URL, body, config);
+        promise.then((res) => {
+            console.log('POST then', res)
+        });
+        promise.catch((err) => console.log('POST catch', err));
+
+        setDisplayBox(true);
+
+    };
+
+    function selectingDays(days) {
+        const newSelection = [...selection, days.id]
+        //se não incluir o dia, adicionar:
+        if (!selection.includes(days.id)) {
+            setSelection(newSelection);
+        };
+
+        //se o dia estiver, caso clicado novamente, remover:
+        if (selection.includes(days.id)) {
+            setSelection(selection.filter((selec) => selec !== days.id));
+        };
+
+    };
+
 
     return (
         <>
@@ -34,10 +100,18 @@ export default function HabitsPage() {
                                 placeholder='nome do hábito'
                                 required
                             />
+
+
                             <WeekdaysButton>
                                 {weekdays.map(d => (
 
-                                    <button key={d.id}>{d.display}</button>
+                                    <button
+                                        key={d.id}
+                                        onClick={() => selectingDays(d)}
+                                        className={selection.includes(d.id) ? 'selected' : ''}
+                                    >
+                                        {d.display}
+                                    </button>
 
                                 ))}
                             </WeekdaysButton>
@@ -51,14 +125,35 @@ export default function HabitsPage() {
                 ) : null}
 
 
-                {!initialMessage ? (
+                {initialMessage.length === 0 ? (
                     <NoHabitMessage>
-                    <p>
-                    Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
-                    </p>
-                </NoHabitMessage>
-                ) : null}
-                
+                        <p>
+                            Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
+                        </p>
+                    </NoHabitMessage>
+                ) : (null)}
+
+                {habitList.map(hn => (
+                    <ToDoHabits key={hn.id}>
+                    <h1>{hn.name}</h1>
+                    
+                    <WeekdaysButton>
+                        {weekdays.map(d => (
+
+                            <button
+                                key={d.id}
+                                disabled
+                                className={hn.days.includes(d.id) ? 'selected' : ''}
+                            >
+                                {d.display}
+                            </button>
+
+                        ))}
+                    </WeekdaysButton>
+
+                </ToDoHabits>
+                ))}
+
 
                 <Menu />
             </HabitsContainer>

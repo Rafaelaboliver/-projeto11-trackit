@@ -5,7 +5,10 @@ import { Link } from "react-router-dom";
 
 
 export default function Navbar() {
+
     const { image } = useContext(UserInfoContext);
+    console.log('imagem:', image);
+    
     return (
         <Header>
 

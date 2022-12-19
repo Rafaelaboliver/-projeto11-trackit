@@ -52,6 +52,7 @@ input{
     height: 45px;
     border-radius: 5px;
     background-color: #fff;
+    font-family: Lexend Deca;
     border: 1px solid #d4d4d4;
     margin: 18px 18px 0px;
     ::placeholder{
@@ -77,8 +78,17 @@ button{
     font-family: Lexend Deca;
     font-size: 20px;
     color: #dbdbdb;
-
 }
+.selected{
+    background-color: #cfcfcf;
+    border: 1px solid #cfcfcf;
+    color: #fff;
+}
+`
+export const Loading = styled.div`
+margin: 0 auto;
+width: 800px;
+height: 800px;
 `
 
 export const EndButtons = styled.div`
@@ -131,4 +141,28 @@ p{
     color: #666666;
 ;
 }
+`
+
+export const ToDoHabits = styled.div`
+width: 340px;
+height: 91px;
+background-color: #fff;
+border-radius: 5px;
+margin: 22px auto 0px;
+border-style: none;
+display: flex;
+flex-direction: column;
+h1{
+    font-family: Lexend Deca;
+    font-size: 20px;
+    color: #666;
+    margin-left: 25px;
+    margin-top: 13px;
+}
+`
+
+export const DeleteIcon = styled.div`
+width: 13px;
+height: 15px;
+color: #666;
 `
