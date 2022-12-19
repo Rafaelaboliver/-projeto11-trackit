@@ -145,7 +145,7 @@ p{
 
 export const ToDoHabits = styled.div`
 width: 340px;
-height: 91px;
+height: 105px;
 background-color: #fff;
 border-radius: 5px;
 margin: 22px auto 0px;
@@ -161,8 +161,12 @@ h1{
 }
 `
 
-export const DeleteIcon = styled.div`
-width: 13px;
-height: 15px;
+export const HabitListHeader = styled.div`
+padding-right: 10px;
+width: 340px;
 color: #666;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
 `
