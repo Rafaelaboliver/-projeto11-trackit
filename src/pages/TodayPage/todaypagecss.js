@@ -23,7 +23,7 @@ h1{
 h3{
     font-family: Lexend Deca;
     font-size: 18px;
-    color: #bababa;
+    color: #666;
     margin-left: 17px;
     margin-top: 5px;
 }
@@ -62,19 +62,22 @@ p{
     font-family: Lexend Deca;
 }
 `
+export const Current = styled.span`
+color: ${({habit}) => (habit.done === true? '#8fc549' : '#666')};
+`
+export const Record = styled.span`
+color: ${({habit}) => (habit.done === true? '#8fc549' : '#666')};
+`
+
 
 export const IconBox = styled.div`
 width: 69px;
 height: 69px;
 border-radius: 5px;
-background-color: #ebebeb;
 button{
     border-radius: 5px;
     border-style: none;
-}
-.done{
-    background-color: #8fc549;
-    border-style: none;
+    background-color: ${({habit}) => habit.done === true? '#8fc549' : '#ebebeb'};
 }
 ion-icon{
     display: flex;

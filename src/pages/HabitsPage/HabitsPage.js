@@ -7,6 +7,9 @@ import axios from 'axios';
 import { useContext } from "react";
 import { UserInfoContext } from '../../contexts/UserInfoContext'
 import { ThreeDots } from 'react-loader-spinner';
+import { useNavigate } from 'react-router-dom';
+
+
 
 export default function HabitsPage() {
 
@@ -15,16 +18,20 @@ export default function HabitsPage() {
     const [displayBox, setDisplayBox] = useState(true);
     const [initialMessage, setInitialMessage] = useState([]);
     const [habitList, setHabitList] = useState(undefined);
-    const { token } = useContext(UserInfoContext);
     const [deleteBox, setDeleteBox] = useState(true);
     const [container, setContainer] = useState(false);
-    const [animation, setAnimation] = useState('');
     const [idSaved, setIdSaved] = useState('');
+    const [getListHabit, setGetListHabit] = useState([]);
+    const navigate = useNavigate();
+
+    const { token } = useContext(UserInfoContext);
 
 
-    console.log('token:', token)
+    console.log('TOKEN:', token);
 
     useEffect(() => {
+
+
         const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
         const body = {};
         const config = {
@@ -35,12 +42,24 @@ export default function HabitsPage() {
 
         const promise = axios.get(URL, config, body);
         promise.then((res) => {
-            setInitialMessage(res.data)
-            setHabitList(res.data)
+            setInitialMessage(res.data);
+            setHabitList(res.data);
+            setGetListHabit(res.data);
+            navigate('/habitos');
         });
         promise.catch((err) => {
-            console.log('ERRO AO RECEBER A LISTA', err.response)
+            console.log('ERRO AO RECEBER A LISTA', err.response);
+            const errMessage = (err.response.status);
+            console.log('erro', errMessage);
+
+            if (errMessage === 422) {
+                (alert('Sessão expirada, faça login novamente'));
+                navigate('/');
+            };
         });
+
+
+
     }, []);
 
 
@@ -51,16 +70,6 @@ export default function HabitsPage() {
 
     function createNewHabit(e) {
 
-        setAnimation(<ThreeDots
-            height="80"
-            width="80"
-            radius="9"
-            color="green"
-            ariaLabel="loading"
-            wrapperStyle
-            wrapperClass
-          />);
-        
         e.preventDefault();
         const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
         const body = { name: habit, days: selection };
@@ -74,13 +83,19 @@ export default function HabitsPage() {
         const promise = axios.post(URL, body, config);
         promise.then((res) => {
             console.log('POST then', res)
-            setSelection([])
-            setHabit('')
+            setSelection([]);
+            setHabit('');
+            const success = (res.status)
+
+            if (success === 201) {
+                alert('Hábito criado!')
+            }
+
         });
         promise.catch((err) => console.log('POST catch', err));
 
         setDisplayBox(true);
-       
+
     };
 
     function selectingDays(days) {
@@ -106,7 +121,6 @@ export default function HabitsPage() {
 
     function handleDelete(text) {
 
-        console.log('text:', text);
 
         if (text === 'cancel') {
             setContainer(false);
@@ -123,10 +137,19 @@ export default function HabitsPage() {
 
             const promise = axios.delete(URL, config, body);
             promise.then((res) => {
-                alert('Hábito deletado com sucesso!')
+                const success = (res.status)
+
+                console.log('detetado', res)
+
+                if (success === 204) {
+                    alert('Hábito deletado com sucesso!');
+                    navigate('/habitos');
+                }
+
             });
             promise.catch((err) => {
-                alert('Erro ao deletar hábito, tente novamente!')
+                alert('Erro ao deletar hábito, tente novamente!');
+                navigate('/habitos');
             });
 
             setContainer(false);
@@ -134,10 +157,7 @@ export default function HabitsPage() {
         }
     }
 
-    function cancelDelete() {
-        setContainer(false);
-        setDeleteBox(true);
-    }
+
 
 
     return (
@@ -197,7 +217,7 @@ export default function HabitsPage() {
                     ) : (null)}
 
 
-                    {habitList.map(h => (
+                    {getListHabit.map(h => (
                         <ToDoHabits>
 
                             <HabitListHeader key={h.id}>

@@ -13,13 +13,14 @@ import { useState } from "react";
 export default function App() {
   const [token, setToken] = useState('');
   const [image, setImage] = useState('');
+  const [percentage, setPercentage] = useState('')
   
 
 
   return (
 
     <BrowserRouter>
-      <UserInfoContext.Provider value={{ token, setToken, image, setImage}}>
+      <UserInfoContext.Provider value={{ token, setToken, image, setImage, percentage, setPercentage}}>
         {/*<Navbar />*/}
         {/*<Menu />*/}
         <Routes>
