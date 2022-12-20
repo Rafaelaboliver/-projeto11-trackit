@@ -114,7 +114,6 @@ font-weight: 400;
 font-size: 16px;
 
 `
-
 export const SaveButton = styled.button`
 width: 84px;
 height: 35px;
@@ -169,4 +168,34 @@ display: flex;
 flex-direction: row;
 align-items: center;
 justify-content: space-between;
+`
+
+export const ConfirmationBox = styled.div `
+width: 250px;
+height: 100px;
+display: flex;
+border-radius: 5px;
+border-style: none;
+flex-direction: column;
+margin: 200px auto 0px;
+background-color: #fff;
+h1{
+    margin: 10px auto 10px;
+    font-family: Lexend Deca;
+    font-size: 18px;
+    color: #666;
+}
+`
+export const YNButtons = styled.div `
+display: flex;
+flex-direction: row;
+margin: auto;
+`
+export const MainContainer = styled.div `
+width: 375px;
+height: 100em;
+display: flex;
+flex-direction: column;
+margin: auto;
+background-color: #e5e5e5;
 `

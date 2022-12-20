@@ -1,4 +1,4 @@
-import { HabitsContainer, NewHabit, HabitBox, WeekdaysButton, EndButtons, CancelButton, SaveButton, NoHabitMessage, ToDoHabits, HabitListHeader, Loading } from './habitspagecss';
+import { HabitsContainer, NewHabit, HabitBox, WeekdaysButton, EndButtons, CancelButton, SaveButton, NoHabitMessage, ToDoHabits, HabitListHeader, Loading, ConfirmationBox, YNButtons, MainContainer } from './habitspagecss';
 import Menu from '../../components/Menu/Menu';
 import Navbar from '../../components/Navbar/Navbar';
 import { weekdays } from '../../constants/weekdays'
@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useContext } from "react";
 import { UserInfoContext } from '../../contexts/UserInfoContext'
+import { ThreeDots } from 'react-loader-spinner';
 
 export default function HabitsPage() {
 
@@ -15,6 +16,11 @@ export default function HabitsPage() {
     const [initialMessage, setInitialMessage] = useState([]);
     const [habitList, setHabitList] = useState(undefined);
     const { token } = useContext(UserInfoContext);
+    const [deleteBox, setDeleteBox] = useState(true);
+    const [container, setContainer] = useState(false);
+    const [animation, setAnimation] = useState('');
+    const [idSaved, setIdSaved] = useState('');
+
 
     console.log('token:', token)
 
@@ -45,6 +51,16 @@ export default function HabitsPage() {
 
     function createNewHabit(e) {
 
+        setAnimation(<ThreeDots
+            height="80"
+            width="80"
+            radius="9"
+            color="green"
+            ariaLabel="loading"
+            wrapperStyle
+            wrapperClass
+          />);
+        
         e.preventDefault();
         const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
         const body = { name: habit, days: selection };
@@ -64,6 +80,7 @@ export default function HabitsPage() {
         promise.catch((err) => console.log('POST catch', err));
 
         setDisplayBox(true);
+       
     };
 
     function selectingDays(days) {
@@ -80,46 +97,113 @@ export default function HabitsPage() {
 
     };
 
-    function deleteHabit (id) {
+    function confirmationMessage(id) {
 
-        const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`;
-        const body = {};
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        };
+        setContainer(true);
+        setDeleteBox(false);
+        setIdSaved(id);
+    }
+
+    function handleDelete(text) {
+
+        console.log('text:', text);
+
+        if (text === 'cancel') {
+            setContainer(false);
+            setDeleteBox(true);
+        } else {
+            const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${idSaved}`;
+            const body = {};
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
 
 
-        const promise = axios.delete(URL,config, body);
-        promise.then((res) => {
-            console.log('POST then', res)
-        });
-        promise.catch((err) => console.log('POST catch', err));
+            const promise = axios.delete(URL, config, body);
+            promise.then((res) => {
+                alert('Hábito deletado com sucesso!')
+            });
+            promise.catch((err) => {
+                alert('Erro ao deletar hábito, tente novamente!')
+            });
 
+            setContainer(false);
+            setDeleteBox(true);
+        }
+    }
+
+    function cancelDelete() {
+        setContainer(false);
+        setDeleteBox(true);
     }
 
 
     return (
-        <>
+        <MainContainer>
             <Navbar />
-            <HabitsContainer>
-                <NewHabit>
-                    <h2>Meus hábitos</h2>
-                    <button onClick={() => setDisplayBox(false)}>+</button>
-                </NewHabit>
+            {container === false ? (
 
-                {!displayBox ? (
-                    <form onSubmit={createNewHabit}>
-                        <HabitBox>
-                            <input
-                                id='habit'
-                                type='text'
-                                value={habit}
-                                onChange={e => setHabit(e.target.value)}
-                                placeholder='nome do hábito'
-                                required
-                            />
+                <HabitsContainer>
+                    <NewHabit>
+                        <h2>Meus hábitos</h2>
+                        <button onClick={() => setDisplayBox(false)}>+</button>
+                    </NewHabit>
+
+                    {!displayBox ? (
+                        <form onSubmit={createNewHabit}>
+                            <HabitBox>
+                                <input
+                                    id='habit'
+                                    type='text'
+                                    value={habit}
+                                    onChange={e => setHabit(e.target.value)}
+                                    placeholder='nome do hábito'
+                                    required
+                                />
+
+
+                                <WeekdaysButton>
+                                    {weekdays.map(d => (
+
+                                        <button
+                                            key={d.id}
+                                            type='button'
+                                            onClick={() => selectingDays(d)}
+                                            className={selection.includes(d.id) ? 'selected' : ''}
+                                        >
+                                            {d.display}
+                                        </button>
+
+                                    ))}
+                                </WeekdaysButton>
+
+                                <EndButtons>
+                                    <CancelButton onClick={() => setDisplayBox(true)}>Cancelar</CancelButton>
+                                    <SaveButton type='submit'>Salvar</SaveButton>
+                                </EndButtons>
+                            </HabitBox>
+                        </form>
+                    ) : null}
+
+
+                    {initialMessage.length === 0 ? (
+                        <NoHabitMessage>
+                            <p>
+                                Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
+                            </p>
+                        </NoHabitMessage>
+                    ) : (null)}
+
+
+                    {habitList.map(h => (
+                        <ToDoHabits>
+
+                            <HabitListHeader key={h.id}>
+                                <h1>{h.name}</h1>
+                                <ion-icon name="trash-outline" onClick={() => confirmationMessage(h.id)}></ion-icon>
+                            </HabitListHeader>
 
 
                             <WeekdaysButton>
@@ -127,65 +211,39 @@ export default function HabitsPage() {
 
                                     <button
                                         key={d.id}
-                                        type='button'
-                                        onClick={() => selectingDays(d)}
-                                        className={selection.includes(d.id) ? 'selected' : ''}
+                                        disabled
+                                        className={h.days.includes(d.id) ? 'selected' : ''}
                                     >
                                         {d.display}
                                     </button>
 
+
                                 ))}
                             </WeekdaysButton>
 
-                            <EndButtons>
-                                <CancelButton onClick={() => setDisplayBox(true)}>Cancelar</CancelButton>
-                                <SaveButton type='submit'>Salvar</SaveButton>
-                            </EndButtons>
-                        </HabitBox>
-                    </form>
-                ) : null}
+
+                        </ToDoHabits>
+                    ))
+                    }
 
 
-                {initialMessage.length === 0 ? (
-                    <NoHabitMessage>
-                        <p>
-                            Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
-                        </p>
-                    </NoHabitMessage>
-                ) : (null)}
+                </HabitsContainer>
+            ) : (null)}
 
+            < Menu />
 
+            {deleteBox === false ? (
+                <ConfirmationBox>
+                    <h1>Deseja excluir esse hábito?</h1>
 
-                {habitList.map(h => (
-                    <ToDoHabits key={h.id}>
-                        <HabitListHeader>
-                            <h1>{h.name}</h1>
-                            <ion-icon name="trash-outline" onClick={() => deleteHabit(h.id)}></ion-icon>
-                        </HabitListHeader>
+                    <YNButtons>
+                        <CancelButton onClick={(text) => handleDelete('cancel')}>Não</CancelButton>
+                        <SaveButton onClick={(text) => handleDelete('confirm')}>Sim</SaveButton>
+                    </YNButtons>
+                </ConfirmationBox>
+            ) : (null)}
 
-
-                        <WeekdaysButton>
-                            {weekdays.map(d => (
-
-                                <button
-                                    key={d.id}
-                                    disabled
-                                    className={h.days.includes(d.id) ? 'selected' : ''}
-                                >
-                                    {d.display}
-                                </button>
-
-                            ))}
-                        </WeekdaysButton>
-
-                    </ToDoHabits>
-                ))}
-
-                <Menu />
-            </HabitsContainer>
-
-
-        </>
+        </MainContainer>
     )
 
 

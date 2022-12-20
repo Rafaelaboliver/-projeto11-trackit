@@ -9,7 +9,7 @@ top: 0;
 padding: 0px 20px 0px;
 flex-direction: row;
 align-items: center;
-max-width: 375px;
+width: 375px;
 display: flex;
 margin: 0 auto;
 height: 70px;
