@@ -13,6 +13,7 @@ width: 375px;
 display: flex;
 margin: 0 auto;
 height: 70px;
+z-index: 1;
 p{
     font-family: Playball;
     font-weight: 400;

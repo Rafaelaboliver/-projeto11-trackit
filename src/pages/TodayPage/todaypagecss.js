@@ -39,7 +39,7 @@ width: 340px;
 height: 95px;
 align-items: center;
 justify-content: space-between;
-padding: 0px 10px 0px;
+padding: 0px 20px 0px;
 background-color: #fff;
 border-radius: 5px;
 display: flex;
@@ -67,17 +67,20 @@ export const IconBox = styled.div`
 width: 69px;
 height: 69px;
 border-radius: 5px;
-margin-left: 30px;
 background-color: #ebebeb;
+button{
+    border-radius: 5px;
+    border-style: none;
+}
+.done{
+    background-color: #8fc549;
+    border-style: none;
+}
 ion-icon{
     display: flex;
     color: #fff;
     font-size: 70px;
     margin: auto;
-}
-.green{
-    background-color: #8fc549;
-    border-style: none;
 }
 
 `

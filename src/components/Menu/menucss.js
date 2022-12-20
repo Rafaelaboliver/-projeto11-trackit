@@ -11,6 +11,7 @@ align-items: center;
 padding: 0px 20px 0px;
 justify-content: space-between;
 margin-top: 527px;
+z-index: 1;
 button{
     width: 85px;
     height: 25px;
