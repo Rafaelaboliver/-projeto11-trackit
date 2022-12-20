@@ -44,6 +44,7 @@ export default function SignUpPage() {
                         value={email}
                         placeholder='email'
                         onChange={e => setEmail(e.target.value)}
+                        data-tes='email-input'
                         required
                     />
 
@@ -53,6 +54,7 @@ export default function SignUpPage() {
                         value={password}
                         placeholder='senha'
                         onChange={e => setPassword(e.target.value)}
+                        data-tes='password-input'
                         required
                     />
 
@@ -62,6 +64,7 @@ export default function SignUpPage() {
                         value={name}
                         placeholder='nome'
                         onChange={e => setName(e.target.value)}
+                        data-tes='name-input'
                         required
                     />
 
@@ -71,14 +74,15 @@ export default function SignUpPage() {
                         value={image}
                         placeholder='imagem'
                         onChange={e => setImage(e.target.value)}
+                        data-tes='user-image-input'
                         required
                     />
 
-                    <button type='submit' >Cadastrar</button>
+                    <button type='submit' data-tes='signup-btn'>Cadastrar</button>
                 </form>
 
                 <TextContainer>
-                    <Link to='/'>
+                    <Link to='/' data-tes='login-link'>
                         <h3>Já tem uma conta? Faça login!</h3>
                     </Link>
                 </TextContainer>

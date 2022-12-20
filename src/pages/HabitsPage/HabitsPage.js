@@ -168,18 +168,24 @@ export default function HabitsPage() {
                 <HabitsContainer>
                     <NewHabit>
                         <h2>Meus hábitos</h2>
-                        <button onClick={() => setDisplayBox(false)}>+</button>
+                        <button
+                            onClick={() => setDisplayBox(false)}
+                            data-tes='habit-create-btn'
+                        >
+                            +
+                        </button>
                     </NewHabit>
 
                     {!displayBox ? (
                         <form onSubmit={createNewHabit}>
-                            <HabitBox>
+                            <HabitBox data-tes='habit-create-container'>
                                 <input
                                     id='habit'
                                     type='text'
                                     value={habit}
                                     onChange={e => setHabit(e.target.value)}
                                     placeholder='nome do hábito'
+                                    data-tes='habit-name-input'
                                     required
                                 />
 
@@ -192,6 +198,7 @@ export default function HabitsPage() {
                                             type='button'
                                             onClick={() => selectingDays(d)}
                                             className={selection.includes(d.id) ? 'selected' : ''}
+                                            data-tes='habit-day'
                                         >
                                             {d.display}
                                         </button>
@@ -200,8 +207,19 @@ export default function HabitsPage() {
                                 </WeekdaysButton>
 
                                 <EndButtons>
-                                    <CancelButton onClick={() => setDisplayBox(true)}>Cancelar</CancelButton>
-                                    <SaveButton type='submit'>Salvar</SaveButton>
+                                    <CancelButton
+                                        onClick={() => setDisplayBox(true)}
+                                        data-tes='email-input'
+                                    >
+                                        Cancelar
+                                    </CancelButton>
+
+                                    <SaveButton
+                                        type='submit'
+                                        data-tes='habit-create-save-btn'
+                                    >
+                                        Salvar
+                                    </SaveButton>
                                 </EndButtons>
                             </HabitBox>
                         </form>
@@ -218,11 +236,16 @@ export default function HabitsPage() {
 
 
                     {getListHabit.map(h => (
-                        <ToDoHabits>
+                        <ToDoHabits data-tes='habit-container'>
 
-                            <HabitListHeader key={h.id}>
+                            <HabitListHeader key={h.id} data-tes='habit-name'>
                                 <h1>{h.name}</h1>
-                                <ion-icon name="trash-outline" onClick={() => confirmationMessage(h.id)}></ion-icon>
+
+                                <ion-icon 
+                                name="trash-outline" 
+                                onClick={() => confirmationMessage(h.id)}
+                                data-tes='habit-delete-btn'
+                                ></ion-icon>
                             </HabitListHeader>
 
 
@@ -233,6 +256,7 @@ export default function HabitsPage() {
                                         key={d.id}
                                         disabled
                                         className={h.days.includes(d.id) ? 'selected' : ''}
+                                        data-tes='habit-day'
                                     >
                                         {d.display}
                                     </button>

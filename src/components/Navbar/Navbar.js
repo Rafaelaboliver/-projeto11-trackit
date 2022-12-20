@@ -10,7 +10,7 @@ export default function Navbar() {
     console.log('imagem:', image);
     
     return (
-        <Header>
+        <Header data-tes='header'>
 
             <p>TrackIt</p>
 

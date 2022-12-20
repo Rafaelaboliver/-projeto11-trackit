@@ -73,18 +73,20 @@ export default function BoxHabitToday({ habit, setGetListToday }) {
     return (
         <BoxToday
             key={habit.id}
+            data-tes='today-habit-container'
         >
 
             <TextContainer>
-                <h1>{habit.name}</h1>
-                <p>Sequência atual: <Current habit={habit}>{habit.currentSequence} dias</Current></p>
-                <p>Seu recorde: <Record habit={habit}>{habit.highestSequence} dias</Record></p>
+                <h1 data-tes='today-habit-name'>{habit.name}</h1>
+                <p data-tes='today-habit-sequence'>Sequência atual: <Current habit={habit}>{habit.currentSequence} dias</Current></p>
+                <p data-tes='today-habit-record'>Seu recorde: <Record habit={habit}>{habit.highestSequence} dias</Record></p>
             </TextContainer>
 
             <IconBox habit={habit}>
                 <button
                     habit={habit}
                     onClick={() => handleClicked(habit.id)}
+                    data-tes='today-habit-check-btn'
                 >
                     <ion-icon name="checkmark-outline" ></ion-icon>
                 </button>

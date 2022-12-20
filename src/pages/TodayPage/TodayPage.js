@@ -59,14 +59,14 @@ export default function TodayPage() {
 
             <HeaderToday>
 
-                <h1>
+                <h1 data-tes='today'>
                     {`${daysOfWeek[dayjs().day()]}, ${dayjs().format('DD/MM')}`}
                 </h1>
 
                 {!percentage > 0 ? (
-                    <h3>Nenhum hábito concluído ainda</h3>
+                    <h3 data-tes='today-counter'>Nenhum hábito concluído ainda</h3>
                 ) : (
-                    <h3>`${percentage}% dos hábitos concluídos`</h3>
+                    <h3 data-tes='today-counter'>`${percentage}% dos hábitos concluídos`</h3>
                 )}
 
             </HeaderToday>

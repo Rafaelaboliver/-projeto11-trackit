@@ -40,6 +40,7 @@ export default function LoginPage() {
                         value={email}
                         placeholder='email'
                         onChange={e => setEmail(e.target.value)}
+                        data-tes='email-input'
                         required
                     />
 
@@ -49,16 +50,17 @@ export default function LoginPage() {
                         value={password}
                         placeholder='senha'
                         onChange={e => setPassword(e.target.value)}
+                        data-tes='password-input'
                         required
                     />
 
-                    <button type='submit' >Entrar</button>
+                    <button type='submit' data-tes='login-btn'>Entrar</button>
                 </form>
             </DataContainer>
 
 
             <TextContainer>
-                <Link to='/cadastro'>
+                <Link to='/cadastro' data-tes='signup-link'>
                     <h3>Não tem conta? Cadastre-se!</h3>
                 </Link>
             </TextContainer>
